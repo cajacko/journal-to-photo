@@ -1,0 +1,143 @@
+{
+  "extends": [
+    "airbnb"
+  ],
+  "rules": {
+    "id-length": [
+      "error",
+      {
+        "min": 3,
+        "max": 24,
+        "exceptions": [
+          "x",
+          "y",
+          "i",
+          "e",
+          "cb",
+          "fs",
+          "id",
+          "db",
+          "is"
+        ]
+      }
+    ],
+    "flowtype/define-flow-type": 1,
+    "flowtype/use-flow-type": 1,
+    "flowtype/require-valid-file-annotation": [
+      2,
+      "always"
+    ],
+    "func-names": "off",
+    "no-warning-comments": [
+      "error",
+      {
+        "location": "anywhere"
+      }
+    ],
+    "no-console": "error",
+    "comma-dangle": [
+      2,
+      {
+        "arrays": "always-multiline",
+        "objects": "always-multiline",
+        "imports": "always-multiline",
+        "exports": "always-multiline",
+        "functions": "ignore"
+      }
+    ],
+    "import/prefer-default-export": "off",
+    "cajacko/valid-jsdoc": "error",
+    "require-jsdoc": [
+      "warn",
+      {
+        "require": {
+          "FunctionDeclaration": true,
+          "MethodDefinition": true,
+          "ClassDeclaration": true,
+          "ArrowFunctionExpression": true
+        }
+      }
+    ],
+    "max-lines": [
+      "error",
+      {
+        "max": 150,
+        "skipBlankLines": true,
+        "skipComments": true
+      }
+    ],
+    "max-len": [
+      "error",
+      {
+        "code": 80,
+        "ignoreStrings": true,
+        "ignoreUrls": true,
+        "ignoreRegExpLiterals": true,
+        "ignoreTemplateLiterals": true
+      }
+    ],
+    "import/no-extraneous-dependencies": [
+      "error",
+      {
+        "devDependencies": true,
+        "optionalDependencies": true,
+        "peerDependencies": true
+      }
+    ],
+    "react/jsx-filename-extension": [
+      1,
+      {
+        "extensions": [
+          ".js",
+          ".native.js",
+          ".web.js",
+          ".ios.js",
+          ".android.js"
+        ]
+      }
+    ],
+    "class-methods-use-this": "off"
+  },
+  "overrides": [
+    {
+      "files": [
+        "**/__mocks__/**/*",
+        "**/__tests__/**/*",
+        "**/*.test.js"
+      ],
+      "rules": {
+        "require-jsdoc": "off",
+        "flowtype/require-valid-file-annotation": "off"
+      }
+    }
+  ],
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "extensions": [
+          ".js",
+          ".native.js",
+          ".web.js",
+          ".ios.js",
+          ".android.js"
+        ]
+      }
+    }
+  },
+  "parser": "babel-eslint",
+  "plugins": [
+    "jest",
+    "flowtype",
+    "cajacko"
+  ],
+  "env": {
+    "jest/globals": true
+  },
+  "globals": {
+    "fetch": false,
+    "document": false,
+    "window": false,
+    "Image": false,
+    "logger": false
+  }
+}

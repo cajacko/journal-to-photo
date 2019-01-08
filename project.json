@@ -1,0 +1,19 @@
+{
+  "title": "Journal to Photos",
+  "slug": "journal-to-photos",
+  "version": "0.1.0",
+  "description": "Create photos from a Day One journal export",
+  "authorName": "Charlie Jackson",
+  "authorUrl": "https://charliejackson.com",
+  "authorEmail": "contact@charliejackson.com",
+  "license": "MIT",
+  "templates": {
+    "main-package": {
+      "type": "npm-module",
+      "bin": {
+        "journal": "dist/bin.js"
+      }
+    }
+  },
+  "templateInitVersion": "1.5.4"
+}

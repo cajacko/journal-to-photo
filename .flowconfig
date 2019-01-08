@@ -1,0 +1,27 @@
+[ignore]
+# Ignore all temp files
+.*/tmp
+
+# Flow error on line 53 (for both files)
+.*/node_modules/redux-persist/lib/index.js.flow
+.*/node_modules/redux-persist/es/index.js.flow
+
+# Flow error on line 406
+.*/node_modules/immutable/dist/immutable.js.flow
+
+# Flow tries to check some of the ejs templates
+.*/node_modules/@cajacko/template/files
+
+[untyped]
+
+[include]
+
+[libs]
+
+[lints]
+
+[options]
+# Some big projects with lots of node_modules need more space for the flow server
+sharedmemory.hash_table_pow=21
+
+[strict]

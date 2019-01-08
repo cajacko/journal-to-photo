@@ -1,0 +1,65 @@
+{
+  "name": "journal-to-photos",
+  "version": "0.1.0",
+  "description": "Create photos from a Day One journal export",
+  "bin": {
+    "journal": "dist/bin.js"
+  },
+  "scripts": {
+    "start": "node .scripts/template.js start",
+    "init": "node .scripts/template.js init",
+    "test": "node .scripts/template.js test",
+    "build": "node .scripts/template.js build",
+    "deploy": "node .scripts/template.js deploy",
+    "upgrade": "node .scripts/template.js upgrade"
+  },
+  "license": "MIT",
+  "jest": {
+    "collectCoverageFrom": [
+      "src/**/*.js"
+    ],
+    "testMatch": [
+      "<rootDir>/src/**/__tests__/**/*.js",
+      "<rootDir>/features/**/*.test.js"
+    ],
+    "testPathIgnorePatterns": [
+      "<rootDir>/node_modules",
+      "<rootDir>/tmp"
+    ],
+    "modulePathIgnorePatterns": [
+      "<rootDir>/tmp"
+    ]
+  },
+  "files": [
+    "dist/**/*"
+  ],
+  "devDependencies": {
+    "babel-eslint": "8.2.2",
+    "babel-plugin-styled-components": "1.6.0",
+    "babel-plugin-transform-class-properties": "6.24.1",
+    "babel-plugin-transform-object-rest-spread": "6.26.0",
+    "babel-plugin-transform-react-jsx-source": "6.22.0",
+    "babel-preset-env": "1.6.1",
+    "babel-preset-flow": "6.23.0",
+    "babel-preset-react": "6.24.1",
+    "eslint": "4.18.1",
+    "eslint-config-airbnb": "16.1.0",
+    "eslint-config-react-app": "2.1.0",
+    "eslint-import-resolver-babel-module": "4.0.0",
+    "eslint-loader": "1.9.0",
+    "eslint-plugin-cajacko": "1.0.0",
+    "eslint-plugin-flowtype": "2.46.1",
+    "eslint-plugin-import": "2.9.0",
+    "eslint-plugin-jest": "21.12.2",
+    "eslint-plugin-jsx-a11y": "6.0.3",
+    "eslint-plugin-react": "7.7.0",
+    "flow-bin": "0.81.0",
+    "husky": "0.14.3",
+    "jest": "23.6.0",
+    "jsdoc": "3.5.5"
+  },
+  "dependencies": {
+    "@cajacko/lib": "5.4.3",
+    "@cajacko/template": "1.5.3"
+  }
+}

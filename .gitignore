@@ -1,0 +1,35 @@
+# -- THIS FILE IS AUTO GENERATED. YOU CAN ADD CUSTOM ENTRIES AT THE BOTTOM --
+
+# npm stuff
+node_modules
+
+# Build dirs
+/build
+/dist
+/lib
+
+# Temp dirs
+tmp
+temp
+
+# For sass compiled bits
+src/components/**/*.css
+src/constants/**/*.css
+
+# Env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Platform specific
+.DS_Store
+
+# Misc
+/coverage
+/docs
+*.log
+
+# -- ADD CUSTOM ENTRIES BELOW THIS HEADER
+# Project Specific
+
