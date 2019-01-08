@@ -33,3 +33,4 @@ src/constants/**/*.css
 # -- ADD CUSTOM ENTRIES BELOW THIS HEADER
 # Project Specific
 
+/journal-images
