@@ -53,12 +53,19 @@ const processText = (text) => {
 
   let nextText = null;
 
+  newText = newText.trim();
+
+  if (!newText || newText === '') return '';
+
   while (!nextText || newText !== nextText) {
     if (!nextText) nextText = newText;
 
     newText = nextText;
 
+    if (!newText || newText === '') return '';
+
     nextText = nextText.replace(new RegExp(/\n\n\n/, 'gm'), '\n\n');
+    nextText = nextText.trim();
   }
 
   newText = newText.trim();
