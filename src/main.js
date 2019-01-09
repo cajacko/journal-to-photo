@@ -37,10 +37,16 @@ const ordinal = (i) => {
   return `${i}th`;
 };
 
+/**
+ * Truncate text
+ */
 const truncate = (text, length) =>
   (text.length > length ? `${text.substring(0, length)}...` : text);
 
-document.addEventListener('DOMContentLoaded', () => {
+/**
+ * Initialise the app
+ */
+const init = () => {
   const {
     text, date, location, ...entry
   } = window.entry;
@@ -57,16 +63,22 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('location').innerHTML = truncate(location, 50);
   }
 
+  const photosElement = document.getElementById('photos');
+
   if (!entry.photos || !entry.photos.length) {
-    document.getElementById('photos').remove();
+    if (photosElement) {
+      photosElement.remove();
+    }
+
     return;
   }
+
+  photosElement.innerHTML = '';
 
   const photos = entry.photos.slice(0, 4);
 
   textElement.setAttribute('style', 'font-size: 0.8rem;');
 
-  const photosElement = document.getElementById('photos');
   const mainElement = document.getElementById('main');
   const photosLength = photos.length;
 
@@ -83,5 +95,20 @@ document.addEventListener('DOMContentLoaded', () => {
     photoNode.setAttribute('style', `background-image: url('${photo}');`);
     photoNode.setAttribute('class', 'photo');
     photosElement.appendChild(photoNode);
+
+    const imageNode = document.createElement('img');
+    imageNode.setAttribute('style', 'display: none;');
+    imageNode.setAttribute('src', photo);
+    imageNode.setAttribute('onerror', `window.imageError("${photo}")`);
+    photosElement.appendChild(imageNode);
   });
+};
+
+document.addEventListener('DOMContentLoaded', () => {
+  init();
 });
+
+window.imageError = (src) => {
+  window.entry.photos = window.entry.photos.filter(photo => photo !== src);
+  init();
+};
