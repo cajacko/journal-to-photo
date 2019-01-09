@@ -95,8 +95,12 @@ const setDate = (date) => {
  * Set the location text
  */
 const setLocation = (location) => {
-  if (location) {
+  const locationIcon = document.getElementById('location-icon');
+
+  if (location && location.length > 0) {
     document.getElementById('location').innerHTML = truncate(location, 50);
+  } else if (locationIcon) {
+    locationIcon.remove();
   }
 };
 
@@ -161,6 +165,8 @@ const setTags = (tags) => {
   if (!tags || tags.length === 0) return;
 
   const tagsElement = document.getElementById('tags');
+
+  tagsElement.innerHTML = '';
 
   Object.keys(tags)
     .slice(0, 4)
