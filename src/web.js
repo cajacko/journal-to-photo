@@ -3,7 +3,7 @@
 import { join } from 'path';
 import { writeFile, readFile, ensureFile } from 'fs-extra';
 
-const puppeteer = require('puppeteer');
+const Utimes = require('@ronomon/utimes');
 
 const htmlPath = join(__dirname, 'index.html');
 const htmlSrcPath = join(__dirname, 'htmlSrc.html');
@@ -31,23 +31,32 @@ const setHtml = content =>
 /**
  * Take a screenshot
  */
-const web = entry => setHtml(entry).then(() =>
-  puppeteer.launch().then(browser =>
-    browser.newPage().then(page =>
-      page
-        .goto(`file:///${htmlPath}`, {
-          waitUntil: 'networkidle0',
-        })
-        .then(() => page.setViewport({ height: 3024, width: 4032 }))
-        .then(() =>
-          new Promise((resolve, reject) =>
-            ensureFile(entry.screenshotPath, e =>
-              (e ? reject(e) : resolve()))))
-        .then(() =>
-          page.screenshot({
-            path: entry.screenshotPath,
-          }))
-        .catch(() => null)
-        .then(() => browser.close()))));
+const web = (page, entry) =>
+  setHtml(entry).then(() =>
+    page
+      .goto(`file:///${htmlPath}`, {
+        waitUntil: 'networkidle0',
+      })
+      .then(() => page.setViewport({ height: 3024, width: 4032 }))
+      .then(() =>
+        new Promise((resolve, reject) =>
+          ensureFile(entry.screenshotPath, e => (e ? reject(e) : resolve()))))
+      .then(() =>
+        page.screenshot({
+          path: entry.screenshotPath,
+        }))
+      .then(() =>
+        new Promise((resolve, reject) => {
+          const time = Math.round(entry.date.getTime());
+
+          Utimes.utimes(entry.screenshotPath, time, time, time, (e) => {
+            if (e) {
+              reject(e);
+              return;
+            }
+
+            resolve();
+          });
+        })));
 
 export default web;

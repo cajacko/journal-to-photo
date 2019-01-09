@@ -7,6 +7,8 @@ import { readdir } from 'fs';
 import { readJSON } from 'fs-extra';
 import web from './web';
 
+const puppeteer = require('puppeteer');
+
 const backupPath =
   '/Users/charliejackson/Downloads/Export - All Entries (2018-12-03)';
 const journalJSONPath = join(backupPath, 'Journal.json');
@@ -76,14 +78,17 @@ const processText = (text) => {
 /**
  * Process an individual entry
  */
-const processEntry = ({
-  text, location, photos, date, screenshotPath,
-}) => {
+const processEntry = (
+  page,
+  {
+    text, location, photos, date, screenshotPath,
+  }
+) => {
   const processedText = processText(text);
 
   if (!processedText || !processedText.length) return Promise.resolve();
 
-  return web({
+  return web(page, {
     screenshotPath,
     text: processedText,
     location: location && location.placeName,
@@ -97,7 +102,7 @@ const processEntry = ({
 /**
  * Process each entry
  */
-const processEntries = entries =>
+const processEntries = (page, entries) =>
   new Promise((resolve, reject) =>
     readdir(outPath, (err, items) => {
       if (err) {
@@ -116,7 +121,7 @@ const processEntries = entries =>
     const loop = (i = 0) => {
       const entry = orderedEntries[i];
 
-      if (processed > 100) {
+      if (processed > 3) {
         // eslint-disable-next-line
         console.log(
           'Processed 100 images and still have not finished. Run again.');
@@ -132,7 +137,7 @@ const processEntries = entries =>
 
       processed += 1;
 
-      return processEntry({ date, screenshotPath, ...entry }).then(() =>
+      return processEntry(page, { date, screenshotPath, ...entry }).then(() =>
         loop(i + 1));
     };
 
@@ -145,6 +150,15 @@ const processEntries = entries =>
 const init = () =>
   new Promise((resolve, reject) =>
     readJSON(journalJSONPath, (e, data) =>
-      (e ? reject(e) : resolve(data.entries)))).then(processEntries);
+      (e ? reject(e) : resolve(data.entries)))).then(entries =>
+    puppeteer.launch().then(browser =>
+      browser
+        .newPage()
+        .then(page => processEntries(page, entries))
+        .catch(e =>
+          browser.close().then(() => {
+            throw e;
+          }))
+        .then(() => browser.close())));
 
 init();
