@@ -47,7 +47,7 @@ const web = (page, entry) =>
         }))
       .then(() =>
         new Promise((resolve, reject) => {
-          const time = Math.round(entry.date.getTime());
+          const time = entry.date.getTime();
 
           Utimes.utimes(entry.screenshotPath, time, time, time, (e) => {
             if (e) {

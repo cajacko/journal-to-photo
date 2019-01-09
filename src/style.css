@@ -86,6 +86,46 @@ html {
   line-height: 1;
 }
 
+.body-red .footer {
+  background-color: #c62828;
+}
+
+.body-pink .footer {
+  background-color: #ad1457;
+}
+
+.body-deep-purple .footer {
+  background-color: #512da8;
+}
+
+.body-blue .footer {
+  background-color: #0d47a1;
+}
+
+.body-cyan .footer {
+  background-color: #00838f;
+}
+
+.body-teal .footer {
+  background-color: #00796b;
+}
+
+.body-green .footer {
+  background-color: #388e3c;
+}
+
+.body-amber .footer {
+  background-color: #ff6f00;
+}
+
+.body-deep-orange .footer {
+  background-color: #d84315;
+}
+
+.body-blue-gray .footer {
+  background-color: #546e7a;
+}
+
 .date {
   font-weight: 400;
 }

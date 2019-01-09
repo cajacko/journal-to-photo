@@ -121,7 +121,7 @@ const processEntries = (page, entries) =>
     const loop = (i = 0) => {
       const entry = orderedEntries[i];
 
-      if (processed > 3) {
+      if (processed > 100) {
         // eslint-disable-next-line
         console.log(
           'Processed 100 images and still have not finished. Run again.');

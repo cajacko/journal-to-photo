@@ -2,6 +2,19 @@
 
 const textLength = 175;
 
+const themes = [
+  'red',
+  'pink',
+  'deep-purple',
+  'blue',
+  'cyan',
+  'teal',
+  'green',
+  'amber',
+  'deep-orange',
+  'blue-gray',
+];
+
 const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 const months = [
   'Jan',
@@ -43,6 +56,20 @@ const ordinal = (i) => {
 const truncate = (text, length) =>
   (text.length > length ? `${text.substring(0, length)}...` : text);
 
+const getRand = ({ date, text }) => {
+  const time = Math.round(new Date(date).getTime() / 1000);
+
+  const timeString = String(time).split('');
+  const textLengthString = String(text ? text.length : 0).split('');
+  const lastTextLengthVal = parseInt(
+    textLengthString[textLengthString.length - 1],
+    10
+  );
+  const lastDateVal = parseInt(timeString[timeString.length - 1], 10);
+  const randString = String(lastTextLengthVal + lastDateVal).split('');
+  return parseInt(randString[randString.length - 1], 10);
+};
+
 /**
  * Initialise the app
  */
@@ -50,6 +77,9 @@ const init = () => {
   const {
     text, date, location, ...entry
   } = window.entry;
+  const theme = themes[getRand(window.entry)];
+
+  document.getElementById('body').setAttribute('class', `body body-${theme}`);
 
   const textElement = document.getElementById('text');
   // TODO: Slit the text and shrink parts, so can look closer to get more detail
