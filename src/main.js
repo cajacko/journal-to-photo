@@ -56,7 +56,10 @@ const ordinal = (i) => {
 const truncate = (text, length) =>
   (text.length > length ? `${text.substring(0, length)}...` : text);
 
-const getRand = ({ date, text }) => {
+/**
+ * Get a random number from 1-10 based off the entry
+ */
+const getRand = (date, text) => {
   const time = Math.round(new Date(date).getTime() / 1000);
 
   const timeString = String(time).split('');
@@ -71,28 +74,36 @@ const getRand = ({ date, text }) => {
 };
 
 /**
- * Initialise the app
+ * Set the main text
  */
-const init = () => {
-  const {
-    text, date, location, ...entry
-  } = window.entry;
-  const theme = themes[getRand(window.entry)];
-
-  document.getElementById('body').setAttribute('class', `body body-${theme}`);
-
+const setText = (text) => {
   const textElement = document.getElementById('text');
   // TODO: Slit the text and shrink parts, so can look closer to get more detail
   textElement.innerHTML = truncate(text, textLength);
+};
 
+/**
+ * Set the date text
+ */
+const setDate = (date) => {
   const d = new Date(date);
 
   document.getElementById('date').innerHTML = `${days[d.getDay()]}, ${ordinal(d.getDate())} ${months[d.getMonth()]} ${d.getFullYear()}`;
+};
 
+/**
+ * Set the location text
+ */
+const setLocation = (location) => {
   if (location) {
     document.getElementById('location').innerHTML = truncate(location, 50);
   }
+};
 
+/**
+ * Set the journal photos
+ */
+const setPhotos = (entry) => {
   const photosElement = document.getElementById('photos');
 
   if (!entry.photos || !entry.photos.length) {
@@ -107,7 +118,7 @@ const init = () => {
 
   const photos = entry.photos.slice(0, 4);
 
-  textElement.setAttribute('style', 'font-size: 0.8rem;');
+  document.getElementById('text').setAttribute('style', 'font-size: 0.8rem;');
 
   const mainElement = document.getElementById('main');
   const photosLength = photos.length;
@@ -132,6 +143,50 @@ const init = () => {
     imageNode.setAttribute('onerror', `window.imageError("${photo}")`);
     photosElement.appendChild(imageNode);
   });
+};
+
+/**
+ * Set the theme
+ */
+const setTheme = (date, text) => {
+  const theme = themes[getRand(date, text)];
+
+  document.getElementById('body').setAttribute('class', `body body-${theme}`);
+};
+
+/**
+ * Set the tag icons/images
+ */
+const setTags = (tags) => {
+  if (!tags || tags.length === 0) return;
+
+  const tagsElement = document.getElementById('tags');
+
+  Object.keys(tags)
+    .slice(0, 4)
+    .forEach((tag) => {
+      const val = tags[tag];
+      const tagElement = document.createElement('div');
+      tagElement.setAttribute('class', 'tag');
+
+      tagElement.innerHTML = `<i class="fas fa-${val}"></i>`;
+      tagsElement.appendChild(tagElement);
+    });
+};
+
+/**
+ * Initialise the app
+ */
+const init = () => {
+  const {
+    text, date, location, tags, ...entry
+  } = window.entry;
+  setTheme(date, text);
+  setTags(tags);
+  setText(text);
+  setDate(date);
+  setLocation(location);
+  setPhotos(entry);
 };
 
 document.addEventListener('DOMContentLoaded', () => {

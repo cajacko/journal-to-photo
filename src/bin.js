@@ -6,6 +6,7 @@ import { join } from 'path';
 import { readdir } from 'fs';
 import { readJSON } from 'fs-extra';
 import web from './web';
+import tags, { ignore } from './tags';
 
 const puppeteer = require('puppeteer');
 
@@ -81,12 +82,14 @@ const processText = (text) => {
 const processEntry = (
   page,
   {
-    text, location, photos, date, screenshotPath,
+    text, location, photos, date, screenshotPath, ...entry
   }
 ) => {
   const processedText = processText(text);
 
   if (!processedText || !processedText.length) return Promise.resolve();
+
+  const iconsAdded = [];
 
   return web(page, {
     screenshotPath,
@@ -96,6 +99,18 @@ const processEntry = (
       photos &&
       photos.map(({ md5, type }) => join(photosPath, `${md5}.${type}`)),
     date,
+    tags: entry.tags
+      ? entry.tags.reduce((acc, tag) => {
+        const icon = tags[tag];
+
+        if (icon && !iconsAdded.includes(icon)) {
+          acc[tag] = icon;
+          iconsAdded.push(icon);
+        }
+
+        return acc;
+      }, {})
+      : {},
   });
 };
 
@@ -144,13 +159,16 @@ const processEntries = (page, entries) =>
     return loop();
   });
 
+const getEntries = () =>
+  new Promise((resolve, reject) =>
+    readJSON(journalJSONPath, (e, data) =>
+      (e ? reject(e) : resolve(data.entries))));
+
 /**
  * Initialise the script
  */
 const init = () =>
-  new Promise((resolve, reject) =>
-    readJSON(journalJSONPath, (e, data) =>
-      (e ? reject(e) : resolve(data.entries)))).then(entries =>
+  getEntries().then(entries =>
     puppeteer.launch().then(browser =>
       browser
         .newPage()
@@ -161,4 +179,38 @@ const init = () =>
           }))
         .then(() => browser.close())));
 
-init();
+/**
+ * Show the next most popular tags to add icons for
+ */
+const showNextTags = () =>
+  getEntries().then((entries) => {
+    const tagCount = entries.reduce((acc, entry) => {
+      if (!entry || !entry.tags || entry.tags.length === 0) return acc;
+
+      const newAcc = Object.assign({}, acc);
+
+      entry.tags.forEach((tag) => {
+        if (!newAcc[tag]) newAcc[tag] = 0;
+
+        newAcc[tag] += 1;
+      });
+
+      return newAcc;
+    }, {});
+
+    const tagKeys = Object.keys(tags);
+
+    const orderedTags = Object.keys(tagCount)
+      .filter(tag => !tagKeys.includes(tag) && !ignore.includes(tag))
+      .sort((a, b) => tagCount[b] - tagCount[a]);
+    const displayList = orderedTags.slice(0, 100).reverse();
+
+    // eslint-disable-next-line
+    console.log(displayList);
+  });
+
+if (process.argv.includes('tags')) {
+  showNextTags();
+} else {
+  init();
+}
